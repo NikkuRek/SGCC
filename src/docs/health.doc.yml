@@ -1,0 +1,53 @@
+# DESCRIPTION: Endpoint para verificar el estado de la aplicación y la conexión a la base de datos sgcc_db.
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Verifica el estado de la aplicación
+      description: Retorna el estado de la aplicación y la conexión a la base de datos sgcc_db.
+      responses:
+        200:
+          description: La aplicación está funcionando correctamente y la base de datos sgcc_db está conectada.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Estado de la aplicación.
+                  database:
+                    type: string
+                    description: Estado de la conexión a la base de datos sgcc_db.
+                  database_name:
+                    type: string
+                    description: Nombre de la base de datos conectada.
+              examples:
+                success:
+                  value:
+                    status: "ok"
+                    database: "connected"
+                    database_name: "sgcc_db"
+        500:
+          description: Error en la conexión a la base de datos sgcc_db.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Estado de la aplicación.
+                  database:
+                    type: string
+                    description: Estado de la conexión a la base de datos sgcc_db.
+                  database_name:
+                    type: string
+                    description: Nombre de la base de datos conectada.
+              examples:
+                error:
+                  value:
+                    status: "error"
+                    database: "disconnected"
+                    database_name: "sgcc_db"

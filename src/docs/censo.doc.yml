@@ -1,0 +1,176 @@
+openapi: 3.0.3
+info:
+  title: Censo API
+  version: 1.0.0
+  description: API para la gestión de censos.
+paths:
+  /censo:
+    get:
+      summary: Obtener todos los censos
+      tags: [Censo]
+      responses:
+        '200':
+          description: Lista de censos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Censo'
+    post:
+      summary: Crear un nuevo censo
+      tags: [Censo]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CensoInput'
+      responses:
+        '201':
+          description: Censo creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Censo'
+        '400':
+          description: Error de validación
+  /censo/{id}:
+    get:
+      summary: Obtener un censo por ID
+      tags: [Censo]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID del censo
+      responses:
+        '200':
+          description: Censo encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Censo'
+        '404':
+          description: Censo no encontrado
+    put:
+      summary: Actualizar un censo por ID
+      tags: [Censo]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID del censo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CensoInput'
+      responses:
+        '200':
+          description: Censo actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Censo'
+        '400':
+          description: Error de validación
+        '404':
+          description: Censo no encontrado
+    delete:
+      summary: Eliminar un censo por ID
+      tags: [Censo]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: ID del censo
+      responses:
+        '204':
+          description: Censo eliminado
+        '404':
+          description: Censo no encontrado
+  /censo/year/{year}:
+    get:
+      summary: Obtener censos por año
+      tags: [Censo]
+      parameters:
+        - in: path
+          name: year
+          schema:
+            type: integer
+          required: true
+          description: Año del censo
+      responses:
+        '200':
+          description: Lista de censos del año especificado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Censo'
+components:
+  schemas:
+    Censo:
+      type: object
+      properties:
+        id_censo:
+          type: integer
+          example: 1
+        anio_censo:
+          type: integer
+          example: 2025
+        descripcion:
+          type: string
+          maxLength: 255
+          nullable: true
+          example: "Censo Comunal 2025"
+        fecha_inicio:
+          type: string
+          format: date
+          nullable: true
+          example: "2025-01-01"
+        fecha_fin:
+          type: string
+          format: date
+          nullable: true
+          example: "2025-01-31"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2025-01-01T12:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2025-01-02T12:00:00Z"
+    CensoInput:
+      type: object
+      required:
+        - anio_censo
+      properties:
+        anio_censo:
+          type: integer
+          example: 2025
+        descripcion:
+          type: string
+          maxLength: 255
+          nullable: true
+          example: "Censo Comunal 2025"
+        fecha_inicio:
+          type: string
+          format: date
+          nullable: true
+          example: "2025-01-01"
+        fecha_fin:
+          type: string
+          format: date
+          nullable: true
+          example: "2025-01-31"

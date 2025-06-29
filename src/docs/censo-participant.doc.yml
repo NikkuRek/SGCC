@@ -1,0 +1,262 @@
+openapi: 3.0.3
+info:
+  title: Censo Participante API
+  version: 1.0.0
+  description: API para gestionar los participantes de un censo.
+tags:
+  - name: CensoParticipante
+    description: Operaciones sobre los participantes del censo
+components:
+  schemas:
+    CensoParticipante:
+      type: object
+      properties:
+        id_censo_part:
+          type: integer
+          example: 1
+        id_persona:
+          type: integer
+          example: 10
+        id_censo:
+          type: integer
+          example: 5
+        tipo_via:
+          type: string
+          enum: [Avenida, Calle]
+          nullable: true
+          example: Avenida
+        nombre_via:
+          type: string
+          maxLength: 100
+          example: "8 Sur"
+        manzana:
+          type: string
+          maxLength: 20
+          nullable: true
+          example: "A"
+        nro_casa:
+          type: string
+          maxLength: 10
+          nullable: true
+          example: "5"
+        jefe_familia:
+          type: boolean
+          example: false
+        cant_anexo_familia:
+          type: integer
+          nullable: true
+          example: 1
+        parentesco:
+          type: string
+          maxLength: 50
+          nullable: true
+          example: "Hijo"
+        fecha_registro:
+          type: string
+          format: date
+          example: "2024-06-01"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-06-01T12:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-06-01T12:00:00Z"
+      required:
+        - id_persona
+        - id_censo
+        - nombre_via
+        - jefe_familia
+        - fecha_registro
+        - createdAt
+        - updatedAt
+    CensoParticipanteInput:
+      type: object
+      properties:
+        id_persona:
+          type: integer
+          example: 10
+        id_censo:
+          type: integer
+          example: 5
+        tipo_via:
+          type: string
+          enum: [Avenida, Calle]
+          nullable: true
+          example: Avenida
+        nombre_via:
+          type: string
+          maxLength: 100
+          example: "8 Sur"
+        manzana:
+          type: string
+          maxLength: 20
+          nullable: true
+          example: "A"
+        nro_casa:
+          type: string
+          maxLength: 10
+          nullable: true
+          example: "5"
+        jefe_familia:
+          type: boolean
+          example: false
+        cant_anexo_familia:
+          type: integer
+          nullable: true
+          example: 1
+        parentesco:
+          type: string
+          maxLength: 50
+          nullable: true
+          example: "Hijo"
+        fecha_registro:
+          type: string
+          format: date
+          example: "2024-06-01"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-06-01T12:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-06-01T12:00:00Z"
+      required:
+        - id_persona
+        - id_censo
+        - nombre_via
+        - jefe_familia
+        - fecha_registro
+        - createdAt
+        - updatedAt
+paths:
+  /censo-participante:
+    get:
+      tags: [CensoParticipante]
+      summary: Obtener todos los participantes del censo
+      responses:
+        '200':
+          description: Lista de participantes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CensoParticipante'
+    post:
+      tags: [CensoParticipante]
+      summary: Crear un nuevo participante del censo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CensoParticipanteInput'
+      responses:
+        '201':
+          description: Participante creado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CensoParticipante'
+        '400':
+          description: Error de validación
+  /censo-participante/{id}:
+    get:
+      tags: [CensoParticipante]
+      summary: Obtener un participante por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Participante encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CensoParticipante'
+        '404':
+          description: Participante no encontrado
+    put:
+      tags: [CensoParticipante]
+      summary: Actualizar un participante por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CensoParticipanteInput'
+      responses:
+        '200':
+          description: Participante actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CensoParticipante'
+        '400':
+          description: Error de validación
+        '404':
+          description: Participante no encontrado
+    delete:
+      tags: [CensoParticipante]
+      summary: Eliminar un participante por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Participante eliminado
+        '404':
+          description: Participante no encontrado
+  /censo-participante/censo/{censoId}:
+    get:
+      tags: [CensoParticipante]
+      summary: Obtener participantes por ID de censo
+      parameters:
+        - name: censoId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de participantes del censo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CensoParticipante'
+  /censo-participante/persona/{personaId}:
+    get:
+      tags: [CensoParticipante]
+      summary: Obtener participantes por ID de persona
+      parameters:
+        - name: personaId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de participaciones de la persona
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CensoParticipante'

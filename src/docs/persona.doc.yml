@@ -1,0 +1,278 @@
+openapi: 3.0.3
+info:
+  title: Personas API
+  version: 1.0.0
+  description: API para la gestión de personas.
+tags:
+  - name: Persona
+    description: Operaciones sobre personas
+paths:
+  /persona:
+    get:
+      tags:
+        - Persona
+      summary: Obtener todas las personas
+      responses:
+        '200':
+          description: Lista de personas obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Persona'
+    post:
+      tags:
+        - Persona
+      summary: Crear una nueva persona
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonaInput'
+      responses:
+        '201':
+          description: Persona creada correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Persona'
+        '400':
+          description: Error de validación o cédula ya registrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: string
+  /persona/{id}:
+    get:
+      tags:
+        - Persona
+      summary: Obtener una persona por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Persona obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Persona'
+        '404':
+          description: Persona no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    put:
+      tags:
+        - Persona
+      summary: Actualizar una persona por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonaInput'
+      responses:
+        '200':
+          description: Persona actualizada correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Persona'
+        '400':
+          description: Error de validación o cédula ya registrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: string
+        '404':
+          description: Persona no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    delete:
+      tags:
+        - Persona
+      summary: Eliminar una persona por ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Persona eliminada correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Persona no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /persona/cedula/{cedula}:
+    get:
+      tags:
+        - Persona
+      summary: Obtener una persona por cédula
+      parameters:
+        - name: cedula
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Persona obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Persona'
+        '404':
+          description: Persona no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+components:
+  schemas:
+    Persona:
+      type: object
+      properties:
+        id_persona:
+          type: integer
+        cedula:
+          type: string
+          maxLength: 15
+        nombres:
+          type: string
+          maxLength: 100
+        apellidos:
+          type: string
+          maxLength: 100
+        fecha_nacimiento:
+          type: string
+          format: date
+          nullable: true
+        sexo:
+          type: string
+          enum: [M, F, Otro]
+          nullable: true
+        telefono:
+          type: string
+          maxLength: 20
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    PersonaInput:
+      type: object
+      required:
+        - cedula
+        - nombres
+        - apellidos
+      properties:
+        cedula:
+          type: string
+          description: Cédula de la persona (solo números, 7-15 caracteres)
+          minLength: 7
+          maxLength: 15
+          example: "12345678"
+        nombres:
+          type: string
+          description: Nombres de la persona (solo letras y espacios, máximo 100 caracteres)
+          maxLength: 100
+          example: "Juan Carlos"
+        apellidos:
+          type: string
+          description: Apellidos de la persona (solo letras y espacios, máximo 100 caracteres)
+          maxLength: 100
+          example: "Pérez Gómez"
+        fecha_nacimiento:
+          type: string
+          format: date
+          description: Fecha de nacimiento (opcional)
+          example: "1990-05-15"
+        sexo:
+          type: string
+          enum: [M, F, Otro]
+          description: Sexo (opcional)
+          example: "M"
+        telefono:
+          type: string
+          description: Teléfono (opcional, máximo 20 caracteres)
+          maxLength: 20
+          example: "04141234567"
