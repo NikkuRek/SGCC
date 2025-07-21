@@ -9,7 +9,6 @@ export const PersonaModel = {
   cedula: {
     type: DataTypes.STRING(15),
     allowNull: false,
-    unique: true,
   },
   nombres: {
     type: DataTypes.STRING(100),
