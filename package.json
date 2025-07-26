@@ -7,7 +7,7 @@
     "build": "tsc",
     "start": "node dist/app.js",
     "dev": "tsc && node dist/app.js",
-    "render": "npm install && tsc"
+    "render": "npm install && tsc && node dist/config/sequelize.config"
   },
   "author": "NK",
   "license": "MIT",
